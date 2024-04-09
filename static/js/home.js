@@ -34,43 +34,46 @@ async function uploadFiles(form, e) {
   formData.append('id', uuid);
 
   myPopup.innerHTML = '';
-  myPopup.style.display = 'block';
+  myPopup.style.display = 'flex';
   const progressBar = document.createElement('div');
   progressBar.style.setProperty('--width', '0%');
   progressBar.style.display = 'block';
   progressBar.classList.add('progressBar');
   myPopup.appendChild(progressBar);
 
-  const response = await fetch('/api/upload', {
-    method: 'POST',
-    body: formData,
-    onUploadProgress: function (progressEvent) {
-      const progress = Math.round(
-        (progressEvent.loaded / progressEvent.total) * 100
+  try {
+    const response = await axios.post('/api/upload', formData, {
+      onUploadProgress: function (progressEvent) {
+        const progress = Math.round(
+          (progressEvent.loaded / progressEvent.total) * 100
+        );
+        progressBar.style.setProperty('--width', progress + '%');
+      },
+    });
+
+    progressBar.style.display = 'none';
+    myPopup.style.display = 'none';
+
+    const data = response.data;
+    if (data.success) {
+      lastImageDate = new Date(data.date * 1000);
+      document.getElementById(
+        'last-image-date'
+      ).innerText = `Your last upload was on: ${lastImageDate.toLocaleString()}`;
+
+      alertUser('Image uploaded successfully', 'green');
+
+      const chosenImages = document.querySelector(
+        '.chosenImages:not(.currentImages)'
       );
-      progressBar.style.setProperty('--width', progress + '%');
-    },
-  });
-
-  progressBar.style.display = 'none';
-  myPopup.style.display = 'none';
-
-  const data = await response.json();
-  if (data.success) {
-    lastImageDate = new Date(data.date * 1000);
-    document.getElementById(
-      'last-image-date'
-    ).innerText = `Your last upload was on: ${lastImageDate.toLocaleString()}`;
-
-    alertUser('Image uploaded successfully', 'green');
-
-    const chosenImages = document.querySelector(
-      '.chosenImages:not(.currentImages)'
-    );
-    chosenImages.innerHTML = '';
-    loadImages();
-  } else {
-    alertUser(data.error, 'red');
+      chosenImages.innerHTML = '';
+      loadImages();
+    } else {
+      alertUser(data.error, 'red');
+    }
+  } catch (error) {
+    console.error(error);
+    alertUser('An error occurred during the upload', 'red');
   }
 }
 

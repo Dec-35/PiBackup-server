@@ -19,7 +19,7 @@ def index():
     if id is None:
         return {"error": "No id provided"}
 
-    backup_folder = os.path.join("backups", id)
+    backup_folder = os.path.join("../backups", id)
     if not os.path.exists(backup_folder):
         # create the folder if it doesn't exist
         os.makedirs(backup_folder)

@@ -11,7 +11,7 @@ def index():
     if id == None:
         return {"error": "No id provided"}
 
-    backup_folder = os.path.join("backups", id)
+    backup_folder = os.path.join("../backups", id)
     if not os.path.exists(backup_folder):
         return {"date": None, "error": "No backups found for the provided id"}
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PiBackup</title>
+  </head>
+  <body>
+    <h1>Welcome to PiBackup</h1>
+    <p id="uuid-desc"></p>
+    <p id="last-image-date"></p>
+    <form onsubmit="uploadFiles(this, event)">
+      <input
+        type="file"
+        accept="image/*"
+        name="photo"
+        id="imagePicker"
+        multiple
+      />
+      <button id="uploadButton">Upload</button>
+    </form>
+    <script>
+      let uuid;
+      let lastImageDate;
+
+      async function load() {
+        //get the uuid
+        uuid = localStorage.getItem('uuid');
+        if (!uuid) {
+          const response = await fetch('/api/getId');
+          const data = await response.json();
+          uuid = data.id;
+          localStorage.setItem('uuid', uuid);
+        }
+
+        const response = await fetch('/api/getLastDate?id=' + uuid);
+        const data = await response.json();
+        lastImageDate = new Date(data.date * 1000);
+        if (lastImageDate)
+          document.getElementById(
+            'last-image-date'
+          ).innerText = `Last image on server was uploaded on: ${lastImageDate.toLocaleString()}`;
+        else
+          document.getElementById(
+            'last-image-date'
+          ).innerText = `No images on server yet`;
+      }
+
+      load();
+      document.getElementById('uuid-desc').innerText = `Your UUID is: ${uuid}`;
+
+      async function uploadFiles(form, e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        formData.append('id', uuid);
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        if (data.success) {
+          lastImageDate = new Date(data.date * 1000);
+          document.getElementById(
+            'last-image-date'
+          ).innerText = `Last image on server was uploaded on: ${lastImageDate.toLocaleString()}`;
+
+          alert('Image uploaded successfully');
+        } else {
+          alert(data.error);
+        }
+      }
+    </script>
+  </body>
+</html>

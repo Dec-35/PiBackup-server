@@ -4,16 +4,16 @@ import os
 getLastDate = Blueprint("getLastDate", __name__)
 
 
-@getLastDate.route("/getLastDate")
+@getLastDate.route("/api/getLastDate")
 def index():
     # Look in the backups folder for the folder with the provided id
     id = request.args.get("id")
     if id == None:
         return {"error": "No id provided"}
 
-    backup_folder = os.path.join("./", "backups", id)
+    backup_folder = os.path.join("backups", id)
     if not os.path.exists(backup_folder):
-        return {"date": "None", "error": "No backups found for the provided id"}
+        return {"date": None, "error": "No backups found for the provided id"}
 
     files = sorted(
         os.listdir(backup_folder),

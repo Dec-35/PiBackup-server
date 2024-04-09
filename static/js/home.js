@@ -36,7 +36,7 @@ async function uploadFiles(form, e) {
   myPopup.innerHTML = '';
   myPopup.style.display = 'block';
   const progressBar = document.createElement('div');
-  progressBar.style.width = '0%';
+  progressBar.style.setProperty('--width', '0%');
   progressBar.style.display = 'block';
   progressBar.classList.add('progressBar');
   myPopup.appendChild(progressBar);
@@ -48,7 +48,7 @@ async function uploadFiles(form, e) {
       const progress = Math.round(
         (progressEvent.loaded / progressEvent.total) * 100
       );
-      progressBar.style.width = progress + '%';
+      progressBar.style.setProperty('--width', progress + '%');
     },
   });
 

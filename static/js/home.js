@@ -35,6 +35,11 @@ async function uploadFiles(form, e) {
 
   myPopup.innerHTML = '';
   myPopup.style.display = 'flex';
+
+  const progressText = document.createElement('p');
+  progressText.innerText =
+    'Uploading image' + (form.imageInput.files.length > 1 ? 's' : '') + '...';
+
   const progressBar = document.createElement('div');
   progressBar.style.setProperty('--width', '0%');
   progressBar.style.display = 'block';
@@ -61,7 +66,12 @@ async function uploadFiles(form, e) {
         'last-image-date'
       ).innerText = `Your last upload was on: ${lastImageDate.toLocaleString()}`;
 
-      alertUser('Image uploaded successfully', 'green');
+      alertUser(
+        'Image' +
+          (form.imageInput.files.length > 1 ? 's' : '') +
+          'uploaded successfully',
+        'green'
+      );
 
       const chosenImages = document.querySelector(
         '.chosenImages:not(.currentImages)'
@@ -73,7 +83,7 @@ async function uploadFiles(form, e) {
     }
   } catch (error) {
     console.error(error);
-    alertUser('An error occurred during the upload', 'red');
+    alertUser('Error : ' + error, 'red');
   }
 }
 

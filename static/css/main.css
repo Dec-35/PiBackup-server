@@ -206,7 +206,7 @@ form {
     height: 100%;
     width: var(--width);
     background-color: #1184f7;
-    border-radius: 5px;
+    border-radius: 5px 0 0 5px;
     transition: width 0.3s ease-in-out;
 }
 

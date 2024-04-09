@@ -13,6 +13,9 @@ app.register_blueprint(getId)
 app.register_blueprint(getLastDate)
 app.register_blueprint(upload)
 
+# use the static folder for css and js
+app.static_folder = "../static"
+
 
 if __name__ == "__main__":
     app.run(debug=True)

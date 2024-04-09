@@ -1,0 +1,148 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+#content {
+    width: fit-content;
+    max-width: 90%;
+    min-width: 500px;
+    background-color: white;
+    border: 2px solid #efefef;
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: 0 0 10px rgba(182, 182, 182, 0.1);
+}
+
+#uuid-desc {
+    font-size: 0.8rem;
+    color: #777;
+    margin-bottom: 1rem;
+
+}
+
+form {
+    display: flex;
+    width: 100%;
+}
+
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: #efefef;
+    margin: 1rem 0;
+}
+
+#uploadButton {
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    margin-left: auto;
+    background-color: #1184f7;
+    color: white;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+#imagePicker {
+    width: fit-content;
+    background-color: inherit;
+    border: 2px solid #1184f7;
+    color: #1184f7;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+#imageInput {
+    display: none;
+}
+
+#imagePicker::-webkit-file-upload-button {
+    border: none;
+}
+
+.darken {
+    transition: filter 0.2s;
+}
+
+.darken:hover {
+    filter: brightness(1.2);
+}
+
+.chosenImages {
+    height: fit-content;
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    gap: 8px;
+    position: relative;
+}
+
+.chosenImages:not(:empty) {
+    margin-top: 1rem;
+}
+
+.chosenImages:not(:empty)::before {
+    position: fixed;
+    content: 'Chosen Images';
+    font-size: 0.9rem;
+    color: #777;
+    transform: translateY(-130%);
+    display: block;
+}
+
+.chosenImage {
+    border-radius: 3px;
+    object-fit: cover;
+    cursor: pointer;
+    max-width: 100px;
+    height: 100px;
+    aspect-ratio: initial;
+}
+
+#imagePopUp {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.25);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    display: none;
+
+}
+
+#imagePopUp img {
+    max-width: 80%;
+    max-height: 80%;
+    border-radius: 5px;
+    object-fit: contain;
+    cursor: default;
+}
+
+@media (max-width: 500px) {
+    #content {
+        min-width: 90%;
+    }
+}

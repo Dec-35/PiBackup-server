@@ -4,21 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PiBackup</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
   </head>
   <body>
-    <h1>Welcome to PiBackup</h1>
-    <p id="uuid-desc"></p>
-    <p id="last-image-date"></p>
-    <form onsubmit="uploadFiles(this, event)">
-      <input
-        type="file"
-        accept="image/*"
-        name="photo"
-        id="imagePicker"
-        multiple
-      />
-      <button id="uploadButton">Upload</button>
-    </form>
+    <div id="content">
+      <h1>Welcome to PiBackup</h1>
+      <p id="uuid-desc"></p>
+      <p id="last-image-date"></p>
+      <div class="separator"></div>
+      <div class="chosenImages"></div>
+      <form onsubmit="uploadFiles(this, event)">
+        <label for="imageInput" id="imagePicker" class="darken"
+          >Select images</label
+        >
+        <input
+          type="file"
+          accept="image/*"
+          name="photo"
+          id="imageInput"
+          multiple
+        />
+
+        <button id="uploadButton" class="darken">Upload</button>
+      </form>
+    </div>
+    <div id="imagePopUp"></div>
     <script>
       let uuid;
       let lastImageDate;
@@ -39,7 +52,7 @@
         if (lastImageDate)
           document.getElementById(
             'last-image-date'
-          ).innerText = `Last image on server was uploaded on: ${lastImageDate.toLocaleString()}`;
+          ).innerText = `Your last upload was on: ${lastImageDate.toLocaleString()}`;
         else
           document.getElementById(
             'last-image-date'
@@ -62,12 +75,52 @@
           lastImageDate = new Date(data.date * 1000);
           document.getElementById(
             'last-image-date'
-          ).innerText = `Last image on server was uploaded on: ${lastImageDate.toLocaleString()}`;
+          ).innerText = `Your last upload was on: ${lastImageDate.toLocaleString()}`;
 
           alert('Image uploaded successfully');
+
+          const chosenImages = document.querySelector('.chosenImages');
+          chosenImages.innerHTML = '';
         } else {
           alert(data.error);
         }
+      }
+
+      document.getElementById('imageInput').addEventListener('change', (e) => {
+        const files = e.target.files;
+        const chosenImages = document.querySelector('.chosenImages');
+        chosenImages.innerHTML = '';
+        for (let i = 0; i < files.length; i++) {
+          const img = document.createElement('img');
+          img.classList.add('chosenImage');
+          img.src = URL.createObjectURL(files[i]);
+          chosenImages.appendChild(img);
+
+          img.addEventListener('click', () => {
+            showImage(files[i]);
+          });
+        }
+      });
+
+      document.getElementById('imagePopUp').addEventListener('click', (e) => {
+        if (!e.target.classList.contains('targetImage'))
+          document.getElementById('imagePopUp').style.display = 'none';
+      });
+
+      function showImage(file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const popup = document.getElementById('imagePopUp');
+          popup.innerHTML = '';
+
+          const img = document.createElement('img');
+          img.classList.add('targetImage');
+          img.src = e.target.result;
+          popup.appendChild(img);
+
+          popup.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
       }
     </script>
   </body>

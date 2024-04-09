@@ -153,6 +153,44 @@ form {
     cursor: default;
 }
 
+.alert {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem;
+    border-radius: 5px;
+    color: white;
+    width: fit-content;
+    max-width: 90vw;
+    animation: enter 0.3s ease-in-out forwards,
+        leave 0.5s ease-in-out 4.3s forwards;
+}
+
+@keyframes enter {
+    from {
+        opacity: 0.2;
+        transform: translateX(-50%) translateY(-200%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes leave {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    to {
+        opacity: 0.2;
+        transform: translateX(-50%) translateY(-200%);
+    }
+}
+
 @media (max-width: 500px) {
     #content {
         min-width: 90%;

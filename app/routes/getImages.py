@@ -15,10 +15,11 @@ def index():
     if not os.path.exists(f"../backups/{id}"):
         return "User has no backups", 404
 
-    # get the images from the folder
-    images = os.listdir(f"../backups/{id}")
-    if len(images) == 0:
-        return "No images found", 404
+    # get the images of the folder, sorted by date
+    images = sorted(os.listdir(f"../backups/{id}"))
+
+    # limit the images to 10
+    images = images[-10:]
 
     # return the images list
     return {"images": images}

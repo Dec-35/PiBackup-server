@@ -13,6 +13,7 @@
     <div id="content">
       <h1>Welcome to PiBackup</h1>
       <p id="uuid-desc"></p>
+      <div class="chosenImages currentImages"></div>
       <p id="last-image-date"></p>
       <div class="separator"></div>
       <div class="chosenImages"></div>
@@ -79,8 +80,11 @@
 
           alert('Image uploaded successfully');
 
-          const chosenImages = document.querySelector('.chosenImages');
+          const chosenImages = document.querySelector(
+            '.chosenImages:not(.currentImages)'
+          );
           chosenImages.innerHTML = '';
+          loadImages();
         } else {
           alert(data.error);
         }
@@ -88,7 +92,9 @@
 
       document.getElementById('imageInput').addEventListener('change', (e) => {
         const files = e.target.files;
-        const chosenImages = document.querySelector('.chosenImages');
+        const chosenImages = document.querySelector(
+          '.chosenImages:not(.currentImages)'
+        );
         chosenImages.innerHTML = '';
         for (let i = 0; i < files.length; i++) {
           const img = document.createElement('img');
@@ -110,18 +116,43 @@
       function showImage(file) {
         const reader = new FileReader();
         reader.onload = function (e) {
-          const popup = document.getElementById('imagePopUp');
-          popup.innerHTML = '';
-
-          const img = document.createElement('img');
-          img.classList.add('targetImage');
-          img.src = e.target.result;
-          popup.appendChild(img);
-
-          popup.style.display = 'flex';
+          showImageLink(e.target.result);
         };
         reader.readAsDataURL(file);
       }
+
+      function showImageLink(image) {
+        const popup = document.getElementById('imagePopUp');
+        popup.innerHTML = '';
+
+        const img = document.createElement('img');
+        img.classList.add('targetImage');
+        img.src = image;
+        popup.appendChild(img);
+
+        popup.style.display = 'flex';
+      }
+
+      function loadImages() {
+        fetch('/api/getImages?id=' + uuid)
+          .then((response) => response.json())
+          .then((data) => {
+            const currentImages = document.querySelector('.currentImages');
+            currentImages.innerHTML = '';
+            data.images.forEach((image) => {
+              const img = document.createElement('img');
+              img.classList.add('chosenImage');
+              img.src = '/api/getImage/' + image + '?id=' + uuid;
+              currentImages.appendChild(img);
+
+              img.addEventListener('click', () => {
+                showImageLink('/api/getImage/' + image + '?id=' + uuid);
+              });
+            });
+          });
+      }
+
+      loadImages();
     </script>
   </body>
 </html>

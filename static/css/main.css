@@ -108,6 +108,7 @@ form {
     margin-top: 1rem;
 }
 
+
 .chosenImages:not(:empty)::before {
     position: fixed;
     content: 'Chosen Images';
@@ -115,6 +116,10 @@ form {
     color: #777;
     transform: translateY(-130%);
     display: block;
+}
+
+.currentImages:not(:empty)::before {
+    content: 'Images on the server';
 }
 
 .chosenImage {

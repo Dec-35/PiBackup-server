@@ -37,8 +37,10 @@ async function uploadFiles(form, e) {
   myPopup.style.display = 'flex';
 
   const progressText = document.createElement('p');
+  progressText.classList.add('progressText');
   progressText.innerText =
     'Uploading image' + (form.imageInput.files.length > 1 ? 's' : '') + '...';
+  myPopup.appendChild(progressText);
 
   const progressBar = document.createElement('div');
   progressBar.style.setProperty('--width', '0%');
